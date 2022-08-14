@@ -1,6 +1,7 @@
-import { NextPage } from "next";
+import { CustomNextPage } from "next";
+import { Layout } from "src/layout/Layout";
 
-const SingIn: NextPage = () => {
+const SingIn: CustomNextPage = () => {
   return (
     <div>
       <h1>Sing in!</h1>
@@ -8,4 +9,6 @@ const SingIn: NextPage = () => {
   );
 };
 
-export default SingIn;
+SingIn.getLayout = (page) => <Layout>{page}</Layout>
+
+export default SingIn
