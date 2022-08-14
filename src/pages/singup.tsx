@@ -9,6 +9,6 @@ const SingUp: CustomNextPage = () => {
   );
 };
 
-SingUp.getLayout = (page) => <Layout>{page}</Layout>
+SingUp.getLayout = (page) => <Layout>{page}</Layout>;
 
 export default SingUp;

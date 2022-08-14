@@ -1,7 +1,7 @@
 import type { CustomNextPage } from "next";
 import Link from "next/link";
 import { Layout } from "src/layout/Layout";
-import { pagesPath } from "src/lib/$path";
+import { pagesPath } from "src/utils/$path";
 
 const Home: CustomNextPage = () => {
   return (
@@ -26,6 +26,6 @@ const Home: CustomNextPage = () => {
   );
 };
 
-Home.getLayout = (page) => <Layout>{page}</Layout>
+Home.getLayout = (page) => <Layout>{page}</Layout>;
 
 export default Home;

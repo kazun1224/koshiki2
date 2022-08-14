@@ -13,6 +13,6 @@ const MyApp: CustomAppPage = ({ Component, pageProps }) => {
       {getLayout(<Component {...pageProps} />)}
     </MantineProvider>
   );
-}
+};
 
 export default MyApp;

@@ -1,7 +1,7 @@
 import { CustomNextPage } from "next";
 import { Layout } from "src/layout/Layout";
 
-const Calculation:CustomNextPage = () => {
+const Calculation: CustomNextPage = () => {
   return (
     <div>
       <h1>calculation!</h1>
@@ -9,6 +9,6 @@ const Calculation:CustomNextPage = () => {
   );
 };
 
-Calculation.getLayout = (page) => <Layout>{page}</Layout>
+Calculation.getLayout = (page) => <Layout>{page}</Layout>;
 
 export default Calculation;

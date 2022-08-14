@@ -9,5 +9,5 @@ const Add: CustomNextPage = () => {
   );
 };
 
-Add.getLayout = (page) => <Layout>{page}</Layout>
+Add.getLayout = (page) => <Layout>{page}</Layout>;
 export default Add;

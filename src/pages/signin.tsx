@@ -9,6 +9,6 @@ const SingIn: CustomNextPage = () => {
   );
 };
 
-SingIn.getLayout = (page) => <Layout>{page}</Layout>
+SingIn.getLayout = (page) => <Layout>{page}</Layout>;
 
-export default SingIn
+export default SingIn;
