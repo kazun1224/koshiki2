@@ -6,7 +6,6 @@ export const Layout: CustomLayout = (props) => {
     <>
       <Head>
         <title>Template</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <header>
         <h2>Header</h2>
