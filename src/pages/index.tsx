@@ -19,7 +19,7 @@ const Home: CustomNextPage = () => {
       <Link href={pagesPath.signin.$url()}>
         <a className="border bg-slate-700 p-2 text-white">signin!!</a>
       </Link>
-      <Link href={pagesPath.singup.$url()}>
+      <Link href={pagesPath.signup.$url()}>
         <a className="border bg-slate-700 p-2 text-white">singup!!</a>
       </Link>
     </div>

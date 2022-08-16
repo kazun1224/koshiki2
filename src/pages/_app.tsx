@@ -8,6 +8,9 @@ const MyApp: CustomAppPage = ({ Component, pageProps }) => {
     <MantineProvider
       withGlobalStyles
       withNormalizeCSS
+      theme={{
+        colorScheme: 'light',
+      }}
       emotionOptions={{ key: "mantine", prepend: false }}
     >
       {getLayout(<Component {...pageProps} />)}

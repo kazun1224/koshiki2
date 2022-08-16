@@ -5,7 +5,7 @@ export const Layout: CustomLayout = (props) => {
   return (
     <>
       <Head>
-        <title>Template</title>
+        <title>こうしき。</title>
       </Head>
       <header>
         <h2>Header</h2>

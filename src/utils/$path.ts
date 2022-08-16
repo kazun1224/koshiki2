@@ -8,8 +8,8 @@ export const pagesPath = {
   "signin": {
     $url: (url?: { hash?: string }) => ({ pathname: '/signin' as const, hash: url?.hash })
   },
-  "singup": {
-    $url: (url?: { hash?: string }) => ({ pathname: '/singup' as const, hash: url?.hash })
+  "signup": {
+    $url: (url?: { hash?: string }) => ({ pathname: '/signup' as const, hash: url?.hash })
   },
   "start": {
     $url: (url?: { hash?: string }) => ({ pathname: '/start' as const, hash: url?.hash })
