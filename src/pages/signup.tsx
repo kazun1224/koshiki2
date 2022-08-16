@@ -1,5 +1,5 @@
 import { CustomNextPage } from "next";
-import { Layout } from "src/layout/Layout";
+import { Layout } from "src/Layout";
 import {
   Paper,
   createStyles,
