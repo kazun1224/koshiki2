@@ -49,7 +49,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const SingIn: CustomNextPage = () => {
+const SingUp: CustomNextPage = () => {
   const { classes } = useStyles();
   return (
     <div className={classes.wrapper}>
@@ -61,7 +61,7 @@ const SingIn: CustomNextPage = () => {
           mt="md"
           mb={50}
         >
-          おかえりなさい！
+          アカウントの作成
         </Title>
 
         <TextInput
@@ -77,13 +77,13 @@ const SingIn: CustomNextPage = () => {
         />
         <Checkbox label="Keep me logged in" mt="xl" size="md" />
         <Button fullWidth mt="xl" size="md">
-          Sing in
+          Sing up
         </Button>
 
         <Text align="center" mt="md">
-          <Link href={pagesPath.signup.$url()} passHref>
+          <Link href={pagesPath.signin.$url()} passHref>
             <Anchor component="a" weight={700}>
-              初めての方はこちら
+              アカウントをお持ちの方はこちら
             </Anchor>
           </Link>
         </Text>
@@ -92,6 +92,6 @@ const SingIn: CustomNextPage = () => {
   );
 };
 
-SingIn.getLayout = (page) => <Layout>{page}</Layout>;
+SingUp.getLayout = (page) => <Layout>{page}</Layout>;
 
-export default SingIn;
+export default SingUp;
