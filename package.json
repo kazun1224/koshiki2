@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hello-pangea/dnd": "^15.0.0",
     "@mantine/core": "4.2.8",
     "@mantine/hooks": "4.2.8",
     "@mantine/next": "4.2.8",
