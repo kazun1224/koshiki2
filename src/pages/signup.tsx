@@ -1,18 +1,12 @@
 import { CustomNextPage } from "next";
 import { Layout } from "src/Layout";
-import {
-  Paper,
-  createStyles,
-  TextInput,
-  PasswordInput,
-  Checkbox,
-  Button,
-  Title,
-  Text,
-  Anchor,
-} from "@mantine/core";
+import { Paper, createStyles, Title, Text, Anchor } from "@mantine/core";
 import Link from "next/link";
 import { pagesPath } from "src/utils/$path";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { ComponentProps } from "react";
+import { useRouter } from "next/router";
+import { firebaseAuth } from "src/utils/firebase";
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -50,6 +44,25 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const SingUp: CustomNextPage = () => {
+  const router = useRouter();
+
+  const createNewUser: ComponentProps<"form">["onSubmit"] = (e) => {
+    e.preventDefault();
+    const email = e.currentTarget.email.value;
+    const password = e.currentTarget.password.value;
+
+    createUserWithEmailAndPassword(firebaseAuth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        router.push(pagesPath.$url());
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(`${errorCode} : ${errorMessage}`);
+      });
+  };
   const { classes } = useStyles();
   return (
     <div className={classes.wrapper}>
@@ -63,23 +76,22 @@ const SingUp: CustomNextPage = () => {
         >
           アカウントの作成
         </Title>
+        {/* ///////////////////////////form//////////////////////////// */}
+        <form onSubmit={createNewUser}>
+          <label htmlFor="email">
+            <input type="text" name="email" id="email" />
+            メールアドレス
+          </label>
 
-        <TextInput
-          label="Email address"
-          placeholder="hello@gmail.com"
-          size="md"
-        />
-        <PasswordInput
-          label="Password"
-          placeholder="Your password"
-          mt="md"
-          size="md"
-        />
-        <Checkbox label="Keep me logged in" mt="xl" size="md" />
-        <Button fullWidth mt="xl" size="md">
-          Sing up
-        </Button>
+          <label htmlFor="password">
+            <input type="text" name="password" id="password" />
+            パスワード
+          </label>
+          {/* <Checkbox label="Keep me logged in" mt="xl" size="md" />*/}
 
+          <button>アカウント作成</button>
+        </form>
+        {/* ///////////////////////////form//////////////////////////// */}
         <Text align="center" mt="md">
           <Link href={pagesPath.signin.$url()} passHref>
             <Anchor component="a" weight={700}>

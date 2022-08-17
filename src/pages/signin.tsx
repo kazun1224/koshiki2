@@ -1,18 +1,16 @@
 import { CustomNextPage } from "next";
 import { Layout } from "src/Layout";
-import {
-  Paper,
-  createStyles,
-  TextInput,
-  PasswordInput,
-  Checkbox,
-  Button,
-  Title,
-  Text,
-  Anchor,
-} from "@mantine/core";
+import { Paper, createStyles, Title, Text, Anchor } from "@mantine/core";
 import Link from "next/link";
 import { pagesPath } from "src/utils/$path";
+import { ComponentProps } from "react";
+import {
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  User,
+} from "firebase/auth";
+import { useRouter } from "next/router";
+import { firebaseAuth } from "src/utils/firebase";
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -50,6 +48,26 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const SingIn: CustomNextPage = () => {
+  const router = useRouter();
+  const provider = new GoogleAuthProvider();
+
+  const login: ComponentProps<"form">["onSubmit"] = (e) => {
+    e.preventDefault();
+    const email = e.currentTarget.email.value;
+    const password = e.currentTarget.password.value;
+
+    signInWithEmailAndPassword(firebaseAuth, email, password)
+      .then((userCredential) => {
+        const user: User = userCredential.user;
+        // const { refreshToken, providerData } = user;
+        // localStorage.setItem("user", JSON.stringify(providerData));
+        // localStorage.setItem("accessToken", JSON.stringify(refreshToken));
+        router.push(pagesPath.$url());
+      })
+      .catch((error) => {
+        console.log(`${error.code} : ${error.message}`);
+      });
+  };
   const { classes } = useStyles();
   return (
     <div className={classes.wrapper}>
@@ -63,22 +81,19 @@ const SingIn: CustomNextPage = () => {
         >
           おかえりなさい！
         </Title>
+        <form onSubmit={login}>
+          <label htmlFor="email">
+            <input type="text" name="email" id="email" />
+            メールアドレス
+          </label>
 
-        <TextInput
-          label="Email address"
-          placeholder="hello@gmail.com"
-          size="md"
-        />
-        <PasswordInput
-          label="Password"
-          placeholder="Your password"
-          mt="md"
-          size="md"
-        />
-        <Checkbox label="Keep me logged in" mt="xl" size="md" />
-        <Button fullWidth mt="xl" size="md">
-          Sing in
-        </Button>
+          <label htmlFor="password">
+            <input type="text" name="password" id="password" />
+            パスワード
+          </label>
+          {/* <Checkbox label="Keep me logged in" mt="xl" size="md" >*/}
+          <button>ログイン！！！</button>
+        </form>
 
         <Text align="center" mt="md">
           <Link href={pagesPath.signup.$url()} passHref>
