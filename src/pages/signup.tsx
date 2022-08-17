@@ -1,18 +1,12 @@
 import { CustomNextPage } from "next";
 import { Layout } from "src/Layout";
-import {
-  Paper,
-  createStyles,
-  TextInput,
-  PasswordInput,
-  Checkbox,
-  Button,
-  Title,
-  Text,
-  Anchor,
-} from "@mantine/core";
+import { Paper, createStyles, Title, Text, Anchor } from "@mantine/core";
 import Link from "next/link";
 import { pagesPath } from "src/utils/$path";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { ComponentProps, useState } from "react";
+import { useRouter } from "next/router";
+import { firebaseAuth } from "src/utils/firebase";
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -50,6 +44,25 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const SingUp: CustomNextPage = () => {
+  const router = useRouter();
+  const [success, setSuccess] = useState(true);
+
+  const createNewUser: ComponentProps<"form">["onSubmit"] = (e) => {
+    e.preventDefault();
+    const email = e.currentTarget.email.value;
+    const password = e.currentTarget.password.value;
+
+    createUserWithEmailAndPassword(firebaseAuth, email, password)
+      .then((userCredential) => {
+        const { refreshToken, providerData }  = userCredential.user;
+        localStorage.setItem("user", JSON.stringify(providerData));
+        localStorage.setItem("accessToken", JSON.stringify(refreshToken));
+      })
+      .catch((error) => {
+        console.log(`${error.code} : ${error.message}`);
+        setSuccess(false);
+      });
+  };
   const { classes } = useStyles();
   return (
     <div className={classes.wrapper}>
@@ -63,23 +76,34 @@ const SingUp: CustomNextPage = () => {
         >
           アカウントの作成
         </Title>
+        {success ? null : <p className="text-red-500 mb-5">登録ができませんでした。お手数ですが、< br/>もう一度やり直してください</p>}
+        <form onSubmit={createNewUser}>
+          <label htmlFor="email">
+            メールアドレス
+            <input type="email" name="email" id="email" autoComplete="email" placeholder="example@example.com" className="appearance-none rounded-md  relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900  focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm mb-5" required/>
+          </label>
 
-        <TextInput
-          label="Email address"
-          placeholder="hello@gmail.com"
-          size="md"
-        />
-        <PasswordInput
-          label="Password"
-          placeholder="Your password"
-          mt="md"
-          size="md"
-        />
-        <Checkbox label="Keep me logged in" mt="xl" size="md" />
-        <Button fullWidth mt="xl" size="md">
-          Sing up
-        </Button>
+          <label htmlFor="password">
+            パスワード
+            <input type="password" name="password" id="password" autoComplete="current-password" placeholder="Password" className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900  focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm mb-5" required/>
+          </label>
 
+          <div className="flex items-center justify-between mb-10">
+              <div className="flex items-center">
+                <input
+                  id="remember-me"
+                  name="remember-me"
+                  type="checkbox"
+                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                />
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                  Remember me
+                </label>
+              </div>
+            </div>
+
+          <button  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">アカウント作成</button>
+        </form>
         <Text align="center" mt="md">
           <Link href={pagesPath.signin.$url()} passHref>
             <Anchor component="a" weight={700}>
