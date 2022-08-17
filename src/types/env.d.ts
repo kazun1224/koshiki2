@@ -1,11 +1,11 @@
 declare namespace NodeJS {
   interface ProcessEnv {
-    readonly API_KEY: string;
-    readonly AUTH_DOMAIN: string;
-    readonly PROJECT_ID: string;
-    readonly STORAGE_BUCKET: string;
-    readonly MESSAGE_SENDER_ID: string;
-    readonly APP_ID: string;
-    readonly MEASUREMENT_ID: string;
+    readonly NEXT_PUBLIC_FIREBASE_API_KEY: string;
+    readonly NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: string;
+    readonly NEXT_PUBLIC_FIREBASE_PROJECT_ID: string;
+    readonly NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: string;
+    readonly NEXT_PUBLIC_FIREBASE_MESSAGE_SENDER_ID: string;
+    readonly NEXT_PUBLIC_FIREBASE_APP_ID: string;
+    readonly NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: string;
   }
 }
