@@ -906,6 +906,11 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
+"@tabler/icons@^1.84.0":
+  version "1.84.0"
+  resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-1.84.0.tgz#b784509a73884ce4c24e3ddba0bb3512be5c681d"
+  integrity sha512-j1ykzKg9XPkuiK3xN8cNVZA+3+ij4gmdRlnxW8dR1QiBDEWHIU0KXIF8Wt1KDC6nR/LmjL+OMJkUdmRj/k2YtQ==
+
 "@types/hoist-non-react-statics@^3.3.1":
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/@types/hoist-non-react-statics/-/hoist-non-react-statics-3.3.1.tgz#1124aafe5118cb591977aeb1ceaaed1070eb039f"
