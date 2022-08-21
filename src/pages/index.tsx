@@ -9,6 +9,7 @@ import { useListState } from "@mantine/hooks";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import useSWR, { Fetcher } from "swr";
 import Link from "next/link";
+import { useEffect } from "react";
 
 const useStyles = createStyles((theme) => ({
   item: {
@@ -54,23 +55,34 @@ const Home: CustomNextPage = () => {
   const router = useRouter();
   const { classes, cx } = useStyles();
   const [state, handlers] = useListState(data);
-  // const [userInfo, setUserInfo] = useState<User | null>(null);
-  console.log(data);
+  //  const [userInfo, setUserInfo] = useState<string | null>(null);
 
-  const user = firebaseAuth.currentUser;
-  if (user) {
-    console.log(user);
-  }
+  useEffect(() => {
+    (() => {
+      const user = firebaseAuth.currentUser;
+      console.log(user);
+      if (!user) {
+        router.push(pagesPath.signin.$url());
+      }
+    })();
 
-  // useEffect(() => {
-  //   const accessToken = userAccessToken();
-  //   if (!accessToken) return router.push("/login");
-  //   const userInfo = fetchUser();
-  //   console.log(userInfo);
-  //   setUserInfo(userInfo);
-  // }, []);
+    // () => {
+    //   const accessToken = userAccessToken();
+    //   if (!accessToken) return router.push("/login");
+    //   const userInfo = fetchUser();
+    //   console.log(userInfo);
+    //   setUserInfo(userInfo);
+    // }
 
-  const logout = () => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // redux toolkit使用例
+  // const userId = useSelector((state: RootState) => state.authCurrentUser.id)
+  // const dispatch = useDispatch();
+  // const onClick = () => dispatch(currentUser());
+
+  function logout() {
     signOut(firebaseAuth)
       .then(() => {
         localStorage.clear();
@@ -79,7 +91,7 @@ const Home: CustomNextPage = () => {
       .catch((error) => {
         console.log(error);
       });
-  };
+  }
 
   const items = state.map((item, index) => (
     <Draggable key={item.symbol} index={index} draggableId={item.symbol}>

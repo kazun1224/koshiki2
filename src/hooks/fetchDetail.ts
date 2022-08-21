@@ -1,4 +1,4 @@
-export const fetchUser = () => {
+export const fetchUser:() => string| null = () => {
   const userInfo =
     localStorage.getItem("user") !== "undefined"
       ? JSON.parse(localStorage.getItem("user") || "{}")
@@ -7,7 +7,7 @@ export const fetchUser = () => {
   return userInfo;
 };
 
-export const userAccessToken = () => {
+export const userAccessToken:() => string| null = () => {
   const accessToken =
     localStorage.getItem("accessToken") !== "undefined"
       ? JSON.parse(localStorage.getItem("accessToken") || "{}")
