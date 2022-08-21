@@ -77,10 +77,7 @@ const Home: CustomNextPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // redux toolkit使用例
-  // const userId = useSelector((state: RootState) => state.authCurrentUser.id)
-  // const dispatch = useDispatch();
-  // const onClick = () => dispatch(currentUser());
+
 
   function logout() {
     signOut(firebaseAuth)
