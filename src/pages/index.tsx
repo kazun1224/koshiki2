@@ -69,7 +69,7 @@ const Home: CustomNextPage = () => {
 
 
 
-  function logout() {
+  const  logout = () => {
     signOut(firebaseAuth)
       .then(() => {
         localStorage.clear();
