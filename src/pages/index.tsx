@@ -55,7 +55,6 @@ const Home: CustomNextPage = () => {
   const router = useRouter();
   const { classes, cx } = useStyles();
   const [state, handlers] = useListState(data);
-  //  const [userInfo, setUserInfo] = useState<string | null>(null);
 
   useEffect(() => {
     (() => {
@@ -65,21 +64,12 @@ const Home: CustomNextPage = () => {
         router.push(pagesPath.signin.$url());
       }
     })();
-
-    // () => {
-    //   const accessToken = userAccessToken();
-    //   if (!accessToken) return router.push("/login");
-    //   const userInfo = fetchUser();
-    //   console.log(userInfo);
-    //   setUserInfo(userInfo);
-    // }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 
 
-  function logout() {
+  const  logout = () => {
     signOut(firebaseAuth)
       .then(() => {
         localStorage.clear();
