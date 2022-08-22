@@ -1,53 +1,77 @@
 import { CustomNextPage } from "next";
 import { Layout } from "src/Layout";
-import {
-  Container,
-  Grid,
-  SimpleGrid,
-  Skeleton,
-  useMantineTheme,
-} from "@mantine/core";
+import { Group, TextInput, Box, Text, Code, Button, Center, ActionIcon } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { DragDropContext, Droppable, Draggable, DropResult, DraggableLocation } from '@hello-pangea/dnd';
+import { GripVertical } from 'tabler-icons-react';
+import { Trash } from 'tabler-icons-react';
+
+interface FormValues {
+  name: string | null;
+  email: string| null;
+}
 
 const Add: CustomNextPage = () => {
-  const PRIMARY_COL_HEIGHT = 300;
-  const theme = useMantineTheme();
-  const SECONDARY_COL_HEIGHT = PRIMARY_COL_HEIGHT / 2 - theme.spacing.md / 2;
+  const form = useForm({
+    initialValues: {
+      employees: [
+        { name: 'John Doe', email: 'john@mantine.dev' },
+        { name: 'Bill Love', email: 'bill@mantine.dev' },
+        { name: 'Nancy Eagle', email: 'nanacy@mantine.dev' },
+        { name: 'Lim Notch', email: 'lim@mantine.dev' },
+        { name: 'Susan Seven', email: 'susan@mantine.dev' },
+      ],
+    },
+  });
+
+  const fields = form.values.employees.map((_, index) => (
+    <Draggable key={index} index={index} draggableId={index.toString()}>
+      {(provided) => (
+        <Group ref={provided.innerRef} mt="xs" {...provided.draggableProps}>
+          <Center {...provided.dragHandleProps}>
+            <GripVertical size={18} />
+          </Center>
+          <TextInput placeholder="John Doe" {...form.getInputProps(`employees.${index}.name`)} />
+          <TextInput
+            placeholder="example@mail.com"
+            {...form.getInputProps(`employees.${index}.email`)}
+          />
+          <ActionIcon color="red" onClick={() => form.removeListItem('employees', index)}>
+        <Trash size={16} />
+      </ActionIcon>
+        </Group>
+      )}
+    </Draggable>
+  ));
+
   return (
-    <div>
-      <h1>Add!!!!</h1>
-      <Container my="md">
-        <SimpleGrid
-          cols={2}
-          spacing="md"
-          breakpoints={[{ maxWidth: "sm", cols: 1 }]}
-        >
-          <Skeleton height={PRIMARY_COL_HEIGHT} radius="md" animate={false} />
-          <Grid gutter="md">
-            <Grid.Col>
-              <Skeleton
-                height={SECONDARY_COL_HEIGHT}
-                radius="md"
-                animate={false}
-              />
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Skeleton
-                height={SECONDARY_COL_HEIGHT}
-                radius="md"
-                animate={false}
-              />
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Skeleton
-                height={SECONDARY_COL_HEIGHT}
-                radius="md"
-                animate={false}
-              />
-            </Grid.Col>
-          </Grid>
-        </SimpleGrid>
-      </Container>
-    </div>
+    <Box sx={{ maxWidth: 500 }} mx="auto">
+      <DragDropContext
+        onDragEnd={({ destination, source } :{destination: DraggableLocation | null,source:DraggableLocation}) =>
+          form.reorderListItem('employees', { from: source.index, to: destination.index })
+        }
+      >
+        <Droppable droppableId="dnd-list" direction="vertical">
+          {(provided) => (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {fields}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+
+      <Group position="center" mt="md">
+        <Button onClick={() => form.insertListItem('employees', { name: '', email: '' })}>
+          Add employee
+        </Button>
+      </Group>
+
+      <Text size="sm" weight={500} mt="md">
+        Form values:
+      </Text>
+      <Code block>{JSON.stringify(form.values, null, 2)}</Code>
+    </Box>
   );
 };
 
