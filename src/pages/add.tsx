@@ -1,53 +1,89 @@
 import { CustomNextPage } from "next";
 import { Layout } from "src/Layout";
 import {
-  Container,
-  Grid,
-  SimpleGrid,
-  Skeleton,
-  useMantineTheme,
+  Group,
+  TextInput,
+  Box,
+  Text,
+  Code,
+  Button,
+  ActionIcon,
 } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { Switch } from "tabler-icons-react";
+import { Trash } from "tabler-icons-react";
+import { randomId } from "@mantine/hooks";
+
+
 
 const Add: CustomNextPage = () => {
-  const PRIMARY_COL_HEIGHT = 300;
-  const theme = useMantineTheme();
-  const SECONDARY_COL_HEIGHT = PRIMARY_COL_HEIGHT / 2 - theme.spacing.md / 2;
+  const form = useForm({
+    initialValues: {
+      employees: [{ name: "", active: false, key: randomId() }],
+    },
+  });
+
+  const fields = form.values.employees.map((item, index) => (
+    <Group key={item.key} mt="xs">
+      <TextInput
+        placeholder="John Doe"
+        withAsterisk
+        sx={{ flex: 1 }}
+        {...form.getInputProps(`employees.${index}.name`)}
+      />
+      <Switch
+        label="Active"
+        {...form.getInputProps(`employees.${index}.active`, {
+          type: "checkbox",
+        })}
+      />
+      <ActionIcon
+        color="red"
+        onClick={() => form.removeListItem("employees", index)}
+      >
+        <Trash size={16} />
+      </ActionIcon>
+    </Group>
+  ));
+
   return (
-    <div>
-      <h1>Add!!!!</h1>
-      <Container my="md">
-        <SimpleGrid
-          cols={2}
-          spacing="md"
-          breakpoints={[{ maxWidth: "sm", cols: 1 }]}
+    <Box sx={{ maxWidth: 500 }} mx="auto">
+      {fields.length > 0 ? (
+        <Group mb="xs">
+          <Text weight={500} size="sm" sx={{ flex: 1 }}>
+            Name
+          </Text>
+          <Text weight={500} size="sm" pr={90}>
+            Status
+          </Text>
+        </Group>
+      ) : (
+        <Text color="dimmed" align="center">
+          No one here...
+        </Text>
+      )}
+
+      {fields}
+
+      <Group position="center" mt="md">
+        <Button
+          onClick={() =>
+            form.insertListItem("employees", {
+              name: "",
+              active: false,
+              key: randomId(),
+            })
+          }
         >
-          <Skeleton height={PRIMARY_COL_HEIGHT} radius="md" animate={false} />
-          <Grid gutter="md">
-            <Grid.Col>
-              <Skeleton
-                height={SECONDARY_COL_HEIGHT}
-                radius="md"
-                animate={false}
-              />
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Skeleton
-                height={SECONDARY_COL_HEIGHT}
-                radius="md"
-                animate={false}
-              />
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <Skeleton
-                height={SECONDARY_COL_HEIGHT}
-                radius="md"
-                animate={false}
-              />
-            </Grid.Col>
-          </Grid>
-        </SimpleGrid>
-      </Container>
-    </div>
+          Add employee
+        </Button>
+      </Group>
+
+      <Text size="sm" weight={500} mt="md">
+        Form values:
+      </Text>
+      <Code block>{JSON.stringify(form.values, null, 2)}</Code>
+    </Box>
   );
 };
 
