@@ -1,68 +1,80 @@
 import { CustomNextPage } from "next";
 import { Layout } from "src/Layout";
-import { Group, TextInput, Box, Text, Code, Button, Center, ActionIcon } from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { DragDropContext, Droppable, Draggable, DropResult, DraggableLocation } from '@hello-pangea/dnd';
-import { GripVertical } from 'tabler-icons-react';
-import { Trash } from 'tabler-icons-react';
+import {
+  Group,
+  TextInput,
+  Box,
+  Text,
+  Code,
+  Button,
+  ActionIcon,
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { Switch } from "tabler-icons-react";
+import { Trash } from "tabler-icons-react";
+import { randomId } from "@mantine/hooks";
 
-interface FormValues {
-  name: string | null;
-  email: string| null;
-}
+
 
 const Add: CustomNextPage = () => {
   const form = useForm({
     initialValues: {
-      employees: [
-        { name: 'John Doe', email: 'john@mantine.dev' },
-        { name: 'Bill Love', email: 'bill@mantine.dev' },
-        { name: 'Nancy Eagle', email: 'nanacy@mantine.dev' },
-        { name: 'Lim Notch', email: 'lim@mantine.dev' },
-        { name: 'Susan Seven', email: 'susan@mantine.dev' },
-      ],
+      employees: [{ name: "", active: false, key: randomId() }],
     },
   });
 
-  const fields = form.values.employees.map((_, index) => (
-    <Draggable key={index} index={index} draggableId={index.toString()}>
-      {(provided) => (
-        <Group ref={provided.innerRef} mt="xs" {...provided.draggableProps}>
-          <Center {...provided.dragHandleProps}>
-            <GripVertical size={18} />
-          </Center>
-          <TextInput placeholder="John Doe" {...form.getInputProps(`employees.${index}.name`)} />
-          <TextInput
-            placeholder="example@mail.com"
-            {...form.getInputProps(`employees.${index}.email`)}
-          />
-          <ActionIcon color="red" onClick={() => form.removeListItem('employees', index)}>
+  const fields = form.values.employees.map((item, index) => (
+    <Group key={item.key} mt="xs">
+      <TextInput
+        placeholder="John Doe"
+        withAsterisk
+        sx={{ flex: 1 }}
+        {...form.getInputProps(`employees.${index}.name`)}
+      />
+      <Switch
+        label="Active"
+        {...form.getInputProps(`employees.${index}.active`, {
+          type: "checkbox",
+        })}
+      />
+      <ActionIcon
+        color="red"
+        onClick={() => form.removeListItem("employees", index)}
+      >
         <Trash size={16} />
       </ActionIcon>
-        </Group>
-      )}
-    </Draggable>
+    </Group>
   ));
 
   return (
     <Box sx={{ maxWidth: 500 }} mx="auto">
-      <DragDropContext
-        onDragEnd={({ destination, source } :{destination: DraggableLocation | null,source:DraggableLocation}) =>
-          form.reorderListItem('employees', { from: source.index, to: destination.index })
-        }
-      >
-        <Droppable droppableId="dnd-list" direction="vertical">
-          {(provided) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
-              {fields}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      {fields.length > 0 ? (
+        <Group mb="xs">
+          <Text weight={500} size="sm" sx={{ flex: 1 }}>
+            Name
+          </Text>
+          <Text weight={500} size="sm" pr={90}>
+            Status
+          </Text>
+        </Group>
+      ) : (
+        <Text color="dimmed" align="center">
+          No one here...
+        </Text>
+      )}
+
+      {fields}
 
       <Group position="center" mt="md">
-        <Button onClick={() => form.insertListItem('employees', { name: '', email: '' })}>
+        <Button
+          onClick={() =>
+            form.insertListItem("employees", {
+              name: "",
+              active: false,
+              key: randomId(),
+            })
+          }
+        >
           Add employee
         </Button>
       </Group>
