@@ -11,11 +11,15 @@ import {
   Menu,
   Autocomplete,
   ActionIcon,
+  Text,
+  Button,
 } from "@mantine/core";
 import { pagesPath } from "src/utils/$path";
 import { firebaseAuth } from "src/utils/firebase";
-import { signOut } from "firebase/auth";
+import { deleteUser, signOut } from "firebase/auth";
 import { Logout, Bell, Search, Settings, PencilPlus } from "tabler-icons-react";
+import { openConfirmModal } from "@mantine/modals";
+import { showNotification } from "@mantine/notifications";
 
 export const Header: FC<{ left: ReactNode }> = ({ left }) => {
   return (
@@ -107,7 +111,7 @@ const UserMenu: FC = () => {
         メニュー2
       </Menu.Item>
       <Menu.Item icon={<Settings size={16} />} component={NextLink} href="#">
-        メニュー3
+        <DeleteModal />
       </Menu.Item>
       <Divider />
       <Menu.Item icon={<Logout size={16} />} onClick={logout}>
@@ -116,3 +120,54 @@ const UserMenu: FC = () => {
     </Menu>
   );
 };
+
+const DeleteModal: FC = () => {
+  const router = useRouter();
+  const user = firebaseAuth.currentUser;
+  const openDeleteModal = () =>
+    openConfirmModal({
+      title: "アカウントを削除しますか？",
+      centered: true,
+      children: (
+        <Text size="sm">
+          アカウントが削除されて今までのデータがすべて削除されてしまいます。
+          削除されたデータは戻すことが不可能です。
+          本当に削除しますか？
+        </Text>
+      ),
+      labels: { confirm: "削除", cancel: "キャンセル" },
+      confirmProps: { color: "red" },
+      onCancel: () => console.log("Cancel"),
+  onConfirm: () => {
+    console.log("Confirmed")
+    deleteUser(user!).then(() => {
+      localStorage.clear();
+      showNotification({
+        title: 'アカウントを削除しました',
+        message: '使ってくれてありがとう！',
+        autoClose: 5000,
+      })
+      router.push(pagesPath.signup.$url());
+
+    }).catch((error) => {
+      console.log(error.message)
+      showNotification({
+        title: 'アカウントを削除できていません',
+        message: 'エラーが発生しました',
+        color: 'red',
+        autoClose: 5000,
+      })
+    });
+  },
+    });
+
+  return user?(
+
+
+    <Button onClick={openDeleteModal} >
+      <span className="text-red-500">アカウントを削除</span>
+    </Button>
+
+  ):null;
+};
+
