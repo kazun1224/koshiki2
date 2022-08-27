@@ -3,6 +3,8 @@ import { MantineProvider } from "@mantine/core";
 import type { CustomAppPage } from "next/app";
 import { Provider } from "react-redux";
 import { store } from "src/state";
+import { ModalsProvider } from "@mantine/modals";
+import { NotificationsProvider } from "@mantine/notifications";
 
 const MyApp: CustomAppPage = ({ Component, pageProps }) => {
   const getLayout = Component.getLayout ?? ((page) => page);
@@ -16,7 +18,11 @@ const MyApp: CustomAppPage = ({ Component, pageProps }) => {
         }}
         emotionOptions={{ key: "mantine", prepend: false }}
       >
-        {getLayout(<Component {...pageProps} />)}
+        <ModalsProvider labels={{ confirm: "Submit", cancel: "Cancel" }}>
+          <NotificationsProvider>
+            {getLayout(<Component {...pageProps} />)}
+          </NotificationsProvider>
+        </ModalsProvider>
       </MantineProvider>
     </Provider>
   );
